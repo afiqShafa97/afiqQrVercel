@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code Generator</title>
-</head>
-<body>
-  <input type="text" id="tautanQR" placeholder="Masukkan tautan di sini">
-  <input type="text" id="namaFileQR" placeholder="Nama file (opsional)">
-  <button id="kirimBtn">Generate QR</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Afiq QR Code Generator</title>
+  </head>
+  <body>
+    <h1>Afiq QR Code Generator</h1>
+    <p>Ketik tautan/link yang ingin dibuat QR Code:</p>
+    <input type="text" id="tautanQR" placeholder="Ketik tautan/link di sini" />
+    <p>Ketik nama file QR Code:</p>
+    <input type="text" id="namaFileQR" placeholder="Ketik nama file di sini" />
+    (default: afiqQRCode.png)
+    <p>Ketik deskripsi untuk diletakkan di bawah gambar:</p>
+    <input type="text" id="deskripsiQR" placeholder="Ketik deskripsi di sini" />
+    (maks 30 karakter, default: tanpa teks)
+    <p><button id="kirimBtn">Kirim</button></p>
 
-  <script src="index.js"></script>
-</body>
+    <script src="./index.js"></script>
+  </body>
 </html>

@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "qr-image": "^3.2.0"
+    "qr-image": "^3.2.0",
+    "sharp": "^0.34.2"
   }
 }

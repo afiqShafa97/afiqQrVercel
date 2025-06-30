@@ -1,6 +1,7 @@
 document.getElementById("kirimBtn").addEventListener("click", async () => {
   const tautan = document.getElementById("tautanQR").value.trim();
   const namaFile = document.getElementById("namaFileQR").value || "afiqQRCode";
+  const deskripsi = document.getElementById("deskripsiQR").value;
 
   if (!tautan) {
     alert("Silakan isi kotak teks tautan sebelum mengirim.");
@@ -13,7 +14,7 @@ document.getElementById("kirimBtn").addEventListener("click", async () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ tautan }),
+      body: JSON.stringify({ tautan, deskripsi }),
     });
 
     const data = await response.json();
