@@ -1,11 +1,8 @@
 import { imageSync } from "qr-image";
 import sharp from "sharp";
-import fs from "fs";
 import path from "path";
-
-function escapeXML(text) {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
-}
+import pureimage from "pureimage";
+import stream from "stream";
 
 async function generateQR(tautan) {
   const qr_png = imageSync(tautan, { type: "png" });
@@ -13,40 +10,46 @@ async function generateQR(tautan) {
 }
 
 async function createTextImage(textContent, width) {
-  const limitedText = escapeXML(textContent.slice(0, 30));
+  const limitedText = textContent.slice(0, 30);
+  const height = 40;
+  const img = pureimage.make(width, height);
+  const ctx = img.getContext("2d");
+
+  // Set background to white
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, width, height);
+
+  // Load font
   const fontPath = path.resolve("./fonts/OpenSans-Regular.ttf");
-  const fontBase64 = fs.readFileSync(fontPath).toString("base64");
+  const font = pureimage.registerFont(fontPath, "OpenSans");
+  await font.load();
 
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${width}' height='30'>
-    <defs>
-      <style type='text/css'>
-        @font-face {
-          font-family: 'MyFont';
-          src: url("data:font/ttf;base64,${fontBase64}");
-        }
-        text {
-          font-family: 'MyFont';
-          font-size: 16px;
-          fill: black;
-        }
-      </style>
-    </defs>
-    <rect width='100%' height='100%' fill='white'/>
-    <text x='50%' y='5' dominant-baseline='hanging' text-anchor='middle'>${limitedText}</text>
-  </svg>`;
+  // Draw text
+  ctx.fillStyle = "black";
+  ctx.font = "32pt OpenSans";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(limitedText, width / 2, height / 2);
 
-  return Buffer.from(svg);
+  const output = new stream.PassThrough();
+  await pureimage.encodePNGToStream(img, output);
+
+  const chunks = [];
+  for await (const chunk of output) {
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
 }
 
 async function combineImages(qrBuffer, textBuffer) {
   const qrImage = sharp(qrBuffer);
   const qrMeta = await qrImage.metadata();
 
-  const textImage = sharp(textBuffer).resize(qrMeta.width, 30).png();
+  const textImage = sharp(textBuffer).resize(qrMeta.width, 40).png();
   const combined = await sharp({
     create: {
       width: qrMeta.width,
-      height: qrMeta.height + 30,
+      height: qrMeta.height + 40,
       channels: 3,
       background: "white"
     }
