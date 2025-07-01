@@ -26,7 +26,7 @@ async function createTextImage(textContent, width) {
 
   // Draw text
   ctx.fillStyle = "black";
-  ctx.font = "32pt OpenSans";
+  ctx.font = "16pt OpenSans";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText(limitedText, width / 2, height / 2);
