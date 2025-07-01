@@ -20,7 +20,7 @@ async function createTextImage(textContent, width) {
   const safeText = escapeXML(limitedText);
   const svg = `<svg width="${width}" height="30" xmlns="http://www.w3.org/2000/svg">
       <rect width="100%" height="100%" fill="white"/>
-      <text x="50%" y="0" font-size="16" fill="black" text-anchor="middle" dominant-baseline="hanging" font-family="Arial">${safeText}</text>
+      <text x="50%" y="0" font-size="16" fill="black" text-anchor="middle" dominant-baseline="hanging">${safeText}</text>
     </svg>`;
   return Buffer.from(svg);
 }
